@@ -17,8 +17,7 @@ class Main
 		cant_lupulo = ARGV[4]
 
 		#Inicializo la planta
-		Planta.new(num_ciclos, cant_cevada, cant_arroz_maiz, cant_levadura, 
-					cant_lupulo)
+
 	end
 
 	# Main principal
