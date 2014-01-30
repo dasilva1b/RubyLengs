@@ -59,6 +59,18 @@ class Silos_Cevada < Maquina
     	@cant_max = 400 
   	end
 
+  	def producir(cant_cevada)
+  		if cant_cevada > @cant_max
+  			@cantidadInsumos[0] = cant_max
+  			cant_cevada = cant_cevada - cant_max
+  		else
+  			@cantidadInsumos[0] = cant_cevada
+  			cant_cevada = 0
+  		end
+
+  		return cant_cevada, @cantidadInsumos[0]
+  	end
+
 end
 
 # Molino
@@ -75,6 +87,16 @@ class Molino < Maquina
     	@ciclos = 1
   	end
 
+  	def producir(pa_anterior)
+  		if pa_anterior > @cant_max
+  			@cantidadInsumos[0] = cant_max
+   		else
+  			@cantidadInsumos[0] = pa_anterior
+  		end
+
+  		return (@cantidadInsumos[0] - (@cantidadInsumos[0] * 0.2))
+  	end
+
 end
 
 # Paila de Mezcla
@@ -88,7 +110,7 @@ class Paila_Mezcla < Maquina
 	  	@porcentaje = [40,60]
 	  	@cant_max = 150
 	  	@ciclos = 2 
-	end  	
+	end 
 
 end
 
@@ -104,6 +126,16 @@ class Cuba_Filtracion < Maquina
     	@cant_max = 135 
     	@desecho = 35
     	@ciclos = 2
+  	end
+
+  	def producir(pa_anterior)
+  		if pa_anterior > @cant_max
+  			@cantidadInsumos[0] = cant_max
+   		else
+  			@cantidadInsumos[0] = pa_anterior
+  		end
+
+  		return (@cantidadInsumos[0] - (@cantidadInsumos[0] * 0.35))
   	end
 
 end
@@ -138,6 +170,16 @@ class Tanque_Preclarificador < Maquina
     	@ciclos = 1
   	end
 
+  	def producir(pa_anterior)
+  		if pa_anterior > @cant_max
+  			@cantidadInsumos[0] = cant_max
+   		else
+  			@cantidadInsumos[0] = pa_anterior
+  		end
+
+  		return (@cantidadInsumos[0] - (@cantidadInsumos[0] * 0.01))
+  	end
+
 end
 
 # Enfriador
@@ -152,6 +194,16 @@ class Enfriador < Maquina
     	@cant_max = 60 
     	@desecho = 100
     	@ciclos = 2
+  	end
+
+  	def producir(pa_anterior)
+  		if pa_anterior > @cant_max
+  			@cantidadInsumos[0] = cant_max
+   		else
+  			@cantidadInsumos[0] = pa_anterior
+  		end
+
+  		return 0
   	end
 
 end
@@ -184,6 +236,17 @@ class Filtro_Cerveza < Maquina
 	  	@cant_max = 100
 	  	@ciclos = 1
 	end
+
+	def producir(pa_anterior)
+  		if pa_anterior > @cant_max
+  			@cantidadInsumos[0] = cant_max
+   		else
+  			@cantidadInsumos[0] = pa_anterior
+  		end
+
+  		return @cantidadInsumos[0]
+  	end
+
   	
 end
 
@@ -198,10 +261,21 @@ class Tanque_Cerveza < Maquina
 	  	@porcentaje = [100]
 	  	@cant_max = 100
 	end
+
+  	def producir(pa_anterior)
+  		if pa_anterior > @cant_max
+  			@cantidadInsumos[0] = cant_max
+   		else
+  			@cantidadInsumos[0] = pa_anterior
+  		end
+
+  		return @cantidadInsumos[0]
+  	end
+
   	
 end
 
-# Llenadora
+# Llenadora y Tapadora
 class Llenadora < Maquina
 
 	def initialize()  
@@ -214,11 +288,24 @@ class Llenadora < Maquina
 	  	@ciclos = 2 
 	end
 
+	def producir(pa_anterior)
+  		if pa_anterior > @cant_max
+  			@cantidadInsumos[0] = cant_max
+   		else
+  			@cantidadInsumos[0] = pa_anterior
+  		end
+
+  		return @cantidadInsumos[0]
+  	end
+
 end
 
 
 # TEST
-#b = Paila_Mezcla.new
+#b = Silos_Cevada.new
 #b.imprimir_maquina
+#cevada, pa = b.producir(4000)
+#puts cevada
+#puts pa
 
 # END maquina.rb
