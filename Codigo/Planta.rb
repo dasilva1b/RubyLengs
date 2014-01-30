@@ -10,17 +10,17 @@ class Planta
 
     @ciclos = ciclos
     @almacen = Almacen.new(lupula,cebada,mezcla,levadura)
-    @silosCebada = Maquina.new
-    @molino = Maquina.new
-    @pailaMezcla = Maquina.new
-    @cuba = Maquina.new
-    @pailaCoccion = Maquina.new
-    @tanquePreclarif = Maquina.new 
-    @enfriador = Maquina.new
-    @tcc = Maquina.new
-    @filtroCerveza = Maquina.new
-    @tanqueFiltroCerveza = Maquina.new
-    @llenadora = Maquina.new
+    @silosCebada = SilosCebada.new
+    @molino = Molino.new
+    @pailaMezcla = Paila_Mezcla.new
+    @cuba = Cuba_Filtracion.new
+    @pailaCoccion = Paila_Coccion.new
+    @tanquePreclarif = Tanque_Preclarificador.new 
+    @enfriador = Enfriador.new
+    @tcc = TCC.new
+    @filtroCerveza = Filtro_Cerveza.new
+    @tanqueFiltroCerveza = Tanque_Cerveza.new
+    @llenadora = Llenadora.new
 
   end
 	
