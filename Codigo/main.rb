@@ -1,8 +1,5 @@
 #!/usr/bin/ruby
 
-load 'planta.rb'
-load 'maquina.rb'
-
 #
 # Implementacion del sistema de creacion de la cerveza glaciar brebaje Stolz
 #

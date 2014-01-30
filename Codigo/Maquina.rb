@@ -1,5 +1,7 @@
 #!/usr/bin/ruby
 
+load 'Almacen.rb'
+
 #
 # Clase que contiene las maquinas por las que esta compuesto el sistema
 #
@@ -7,7 +9,7 @@ class Maquina
 	
 	#Atributos de la maquina
 	attr_reader :nombre, :estado, :insumos, :cant_max, :porcentaje, :desecho, 
-				      :ciclos  
+				      :ciclos, :ciclos_realizados
 
 	def initialize()
 	    @nombre = ""
@@ -15,10 +17,69 @@ class Maquina
 	    @cant_max = 0 
 	    @desecho = 0
 	    @ciclos = 0
+      @ciclos_realizados = 0
 	    @insumos = []
 	    @porcentaje = []
 	    @cantidadInsumos = []
 	end
+
+  def mapear(nombreMaquina)
+      r = case nombreMaquina
+              when "Silos de Cebada" then ("producto_silos_cebada")
+              when "Molino" then ("producto_molino")
+              when "Paila de Mezcla" then ("producto_paila_mezcla")
+              when "Cuba de Filtracion" then ("producto_cuba_filtracion")
+              when "Paila de Coccion" then ("producto_paila_coccion")
+              when "Tanque preclarificador" then ("producto_tanque_preclarificador")
+              when "Enfriador" then ("producto_enfriador")
+              when "TCC" then ("producto_tcc")
+              when "Filtro de Cerveza" then ("producto_filtro_cerveza")
+              when "Tanques para Cerveza Filtrada" then ("producto_tanque_cerveza")
+              when "Llenadora y Tapadora" then ("cerveza")
+          end
+  end
+
+  def producir(almacen)
+    if (@estado == "inactiva")
+      for i in (0..insumos.size)
+          c = (@porcentaje[i]*@cant_max - @cantidadInsumos[i])
+          if (c!=0)
+            r = almacen.traer(@insumos[i],c)
+            @cantidadInsumos[i] += r
+          end
+      end
+      total = 0
+      for i in (0..insumos.size)
+          total +=  @cantidadInsumos[i]
+      end
+      if (total == @cant_max)
+          @estado = "llena"
+      end
+
+    elsif (@estado == "llena")
+      @estado == "procesando"
+
+    elsif (@estado == "procesando")
+      if (@ciclos == @ciclos_realizados)
+        @estado = "en espera"
+      else
+        @ciclos -= 1
+      end
+
+    elsif (@estado == "en espera")
+      for i in (0..insumos.size)
+         almacen.sumar(insumos[i],cantidadInsumos[i])
+         cantidadInsumos[i] = 0
+      end
+
+      n = mapear(@nombre)
+      t = almacen.obtener_insumo(n)
+      if (t == 0 || n == "cerveza")
+          @estado = "inactiva"
+          @ciclos_realizados = 0
+      end  
+    end
+  end
 
 	#
 	# Imprime los detalles de la maquina
@@ -162,7 +223,7 @@ class TCC < Maquina
 	  	super
 	  	@nombre = "TCC"
 	  	@insumos = ["producto_enfriador","levadura"]
-	  	@porcentaje = [0.99,0.1]
+	  	@porcentaje = [0.99,0.01]
 	  	@cantidadInsumos = [0,0]
 	  	@cant_max = 200
 	  	@desecho = 0.10
@@ -208,29 +269,11 @@ class Llenadora < Maquina
 	  	@nombre = "Llenadora y Tapadora"
 	  	@insumos = ["producto_tanque_cerveza"]
 	  	@cantidadInsumos = [0]
-	  	@porcentaje = [100]
+	  	@porcentaje = [1]
 	  	@cant_max = 50
 	  	@ciclos = 2 
 	end
 
 end
-
-
-
-a = Array.new 
-
-# TEST
-a[0] = Silos_Cebada.new
-a[1] = Llenadora.new
-
-
-      for i in (0..1)
-        print a[i].imprimir_maquina,"\n"
-      end
-
-#b.imprimir_maquina
-#cebada, pa = b.producir(4000)
-#puts cebada
-#puts pa
 
 # END Maquina.rb
