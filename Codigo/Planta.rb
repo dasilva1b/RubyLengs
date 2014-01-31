@@ -39,6 +39,8 @@ class Planta
     i=0
 
     print "Inicio planta\n"
+
+    cantidadCervezas = 0
     while(i < @ciclos)
 
       i+=1;
@@ -66,7 +68,15 @@ class Planta
       @tanqueFiltroCerveza.producir(@almacen)
       @tanqueFiltroCerveza.imprimir()
       @llenadora.producir(@almacen)     
-      @llenadora.imprimir()     
+      @llenadora.imprimir()    
+
+      #Verifica si hubo cambios en la cantidad de cervezas
+      #en el ciclo
+      cervezasCiclo =  @almacen.obtener_insumo("cerveza")
+      if (cantidadCervezas != cervezasCiclo)
+        print "Cervezas Salientes: ", (cervezasCiclo - cantidadCervezas), "\n\n"
+        cantidadCervezas = cervezasCiclo
+      end  
 
     end
 

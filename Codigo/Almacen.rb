@@ -177,10 +177,6 @@ class Almacen
 	# Agrega una cantidad de un insumo en el almacen
 	#
 	def sumar_insumo(nombreInsumo, cantidad)
-		print 'kkkkkkkkk'
-		print "\n"
-		print nombreInsumo,'-'
-		print "\n"
 		case nombreInsumo
 			when "cebada" then (@cebada += cantidad)
 			when "arroz_maiz" then (@arroz_maiz += cantidad)
@@ -240,8 +236,6 @@ class Almacen
 				(@producto_tanque_cerveza)
 			when "cerveza" then (@cerveza)
 		end
-		print '>>>>>>>>>>>>>>>>>>>>>r es'
-		print r
 		return r
 	end
 

@@ -81,27 +81,24 @@ class Maquina
     #almacen ya se ha consumido lo que produjo.
     elsif (@estado == "en espera")
       
-      #Problema aca: La maquina esta depositando en el almacen sus insumos
-      #debe depositar es su producto. Su producto sera: la suma de sus insumos
-      #menos el porcentaje que realmente entrega
       total=0
       #ciclo para reiniciar mis insumos en 0 y contabilizar.
       for i in (0..insumos.size-1)
-	 total+=@cantidadInsumos[i]
+	       total+=@cantidadInsumos[i]
          @cantidadInsumos[i] = 0
       end
       #Depositare
       #Obtengo mi insumo creado
-      n1=mapear(@nombre)
-      almacen.sumar_insumo(n1,total*(1-@desecho))
+      n=mapear(@nombre)
+      almacen.sumar_insumo(n,total*(1-@desecho))
 
 
       #Si ya no hay insumos de la maquina, pasa a inactiva
-      n = mapear(@nombre)
+      #En caso 
       t = almacen.obtener_insumo(n)
       if (t == 0 || n == "cerveza")
-          @estado = "inactiva"
-          @ciclos_realizados = 0
+        @estado = "inactiva"
+        @ciclos_realizados = 0        
       end  
     end
   end
@@ -111,11 +108,11 @@ class Maquina
 	#
 	def imprimir()
 	  print "Maquina: ", @nombre, "\n"
-  		print "Estado: ", @estado, "\n"
-  		if (@estado == "inactiva" || @estado == "llena")
-    			print "Insumos:\n"
-    			imprimirInsumos()
-  		end
+		print "Estado: ", @estado, "\n"
+		if (@estado == "inactiva" || @estado == "llena")
+  			print "Insumos:\n"
+  			imprimirInsumos()
+		end
 	  print "\n"
 	end
 	
@@ -123,9 +120,9 @@ class Maquina
     # Imprime los insumos de una maquina
     #
     def imprimirInsumos()
-	for i in (0..insumos.size-1)
-	    print @insumos[i],"\t", @cantidadInsumos[i],"\n"
-	end
+	    for i in (0..insumos.size-1)
+	        print @insumos[i],"\t", @cantidadInsumos[i],"\n"
+	    end
     end
 
 end
