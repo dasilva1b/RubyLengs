@@ -2,12 +2,11 @@
 
 load 'Almacen.rb'
 
-#
-# Clase que contiene las maquinas por las que esta compuesto el sistema
-#
+# Clase que representa una maquina parte del proceso de fabricacion de cerveza.
+# Entre los atributos vitales de esta clase estan: el estado de la maquina, sus
+# ciclos de procesamiento, los insumos que requiere, entre otros <ver informe>
 class Maquina
 	
-	#Atributos de la maquina
 	attr_reader :nombre, :estado, :insumos, :cant_max, :porcentaje, :desecho, 
 				      :ciclos, :ciclos_realizados
 
@@ -17,12 +16,13 @@ class Maquina
 	    @cant_max = 0 
 	    @desecho = 0
 	    @ciclos = 0
-      @ciclos_realizados = 0
+	    @ciclos_realizados = 0
 	    @insumos = []
 	    @porcentaje = []
 	    @cantidadInsumos = []
 	end
 
+  #Dado el nombre de una maquina, retorna el producto que fabrica.
   def mapear(nombreMaquina)
       r = case nombreMaquina
               when "Silos de Cebada" then ("producto_silos_cebada")
@@ -37,28 +37,37 @@ class Maquina
               when "Tanques para Cerveza Filtrada" then ("producto_tanque_cerveza")
               when "Llenadora y Tapadora" then ("cerveza")
           end
+      return r
   end
 
+  #Metodo que controla la accion de una maquina en una iteracion dada.
+  #La accion a realizar depende del estado de la maquina.
   def producir(almacen)
+    
+    #Si la maquina esta inactiva, se intenta traer los insumos que requiere
+    #del almacen. Si obtiene lo que desea, pasa al estado de llena.
     if (@estado == "inactiva")
-      for i in (0..insumos.size)
+      for i in (0..insumos.size-1)
           c = (@porcentaje[i]*@cant_max - @cantidadInsumos[i])
           if (c!=0)
-            r = almacen.traer(@insumos[i],c)
+            r = almacen.traer_insumo(@insumos[i],c)
             @cantidadInsumos[i] += r
           end
       end
       total = 0
-      for i in (0..insumos.size)
+      for i in (0..insumos.size-1)
           total +=  @cantidadInsumos[i]
       end
       if (total == @cant_max)
           @estado = "llena"
       end
-
+    
+    #Si la maquina esta llena, se pasa al estado de procesando.
     elsif (@estado == "llena")
-      @estado == "procesando"
+      @estado = "procesando"
 
+    #Si la maquina esta procesando, se mantiene en este estado hasta que sus
+    #ciclos de iteracion hayan finalizado.
     elsif (@estado == "procesando")
       if (@ciclos == @ciclos_realizados)
         @estado = "en espera"
@@ -66,12 +75,23 @@ class Maquina
         @ciclos -= 1
       end
 
+    #Si la maquina esta en espera, es decir, termino de procesar, deposita
+    #lo fabricado en el almacen y cambia a estado de inactiva solo si en el
+    #almacen ya se ha consumido lo que produjo.
     elsif (@estado == "en espera")
-      for i in (0..insumos.size)
-         almacen.sumar(insumos[i],cantidadInsumos[i])
-         cantidadInsumos[i] = 0
+      
+      #Problema aca: La maquina esta depositando en el almacen sus insumos
+      #debe depositar es su producto. Su producto sera: la suma de sus insumos
+      #menos el porcentaje que realmente entrega
+      total=0
+      #ciclo para reiniciar mis insumos en 0 y contabilizar.
+      for i in (0..insumos.size-1)
+	 total+=@cantidadInsumos[i]
+         @cantidadInsumos[i] = 0
       end
-
+      #Depositare
+      n1=mapear(@nombre)
+      almacen.sumar_insumo(n1,total*(1-@desecho/100))
       n = mapear(@nombre)
       t = almacen.obtener_insumo(n)
       if (t == 0 || n == "cerveza")
@@ -85,22 +105,23 @@ class Maquina
 	# Imprime los detalles de la maquina
 	#
 	def imprimir()
-      print "Maquina: ", @nombre, "\n"
+	  print "Maquina: ", @nombre, "\n"
   		print "Estado: ", @estado, "\n"
   		if (@estado == "inactiva" || @estado == "llena")
     			print "Insumos:\n"
     			imprimirInsumos()
   		end
+	  print "\n"
 	end
 	
-	#
-	# Imprime los insumos de una maquina
-	#
-	def imprimirInsumos()
-	    for i in (0..insumos.size)
-	    	print @insumos[i],"\t", @cantidadInsumos[i],"\n"
-	    end
-  	end
+    #
+    # Imprime los insumos de una maquina
+    #
+    def imprimirInsumos()
+	for i in (0..insumos.size)
+	    print @insumos[i],"\t", @cantidadInsumos[i],"\n"
+	end
+    end
 
 end
 

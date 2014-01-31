@@ -1,4 +1,9 @@
 #!/usr/bin/ruby
+load 'Almacen.rb'
+load 'Maquina.rb'
+# Clase planta que modela el centro de fabricacion de cerveza. Contiene una instancia
+# de Maquina por cada maquina necesaria para producir cerveca segun lo indicado
+# en el enunciado.
 
 class Planta
 
@@ -6,11 +11,12 @@ class Planta
               :tanquePreclarif, :enfriador, :tcc, :filtroCerveza, :tanqueFiltroCerveza,
               :llenadora
 
+#   Constructor de la clase. Inicia todas las maquinas y el almacen
   def initialize(ciclos, lupula, cebada, mezcla, levadura)
 
     @ciclos = ciclos
     @almacen = Almacen.new(lupula,cebada,mezcla,levadura)
-    @silosCebada = SilosCebada.new
+    @silosCebada = Silos_Cebada.new
     @molino = Molino.new
     @pailaMezcla = Paila_Mezcla.new
     @cuba = Cuba_Filtracion.new
@@ -24,19 +30,21 @@ class Planta
 
   end
 	
+  #Metodo en el cual se realiza la fabricacion de cerveza. En cada iteracion
+  #se llama al metodo producir de cada maquina. Dicho metodo es el que se encarga
+  #de realizar lo que la maquina deba hacer segun su estado y el inventario
+  #que se encuentre en el almacen.
   def activar()
 
     i=0
 
     print "Inicio planta\n"
-
-    while(i<@ciclos)
+    while(i < @ciclos)
 
       i+=1;
-      print "Ciclo numero",i,"\n"
+      print "---------->Ciclo numero",i,"<---------------\n"
 
       #Inicio de procesamiento
-
       @silosCebada.producir(@almacen)
       @silosCebada.imprimir()
       @molino.producir(@almacen)
@@ -60,13 +68,11 @@ class Planta
       @llenadora.producir(@almacen)     
       @llenadora.imprimir()     
 
-
-
-
     end
 
+    #Despues de haber terminado de fabricar, imprimimos lo que haya quedado
+    #en el almacen
     @almacen.imprimir()
-
 
   end
 
