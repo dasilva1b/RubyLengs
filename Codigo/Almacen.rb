@@ -12,8 +12,8 @@ class Almacen
 				:producto_enfriador,:producto_tcc,:producto_filtro_cerveza,
 				:producto_tanque_cerveza,:cerveza
 
-	def initialize(cant_cevada, cant_arroz_maiz, cant_levadura, cant_lupulo)
-		@cebada = cant_cevada 
+	def initialize(cant_cebada, cant_arroz_maiz, cant_levadura, cant_lupulo)
+		@cebada = cant_cebada 
 		@arroz_maiz = cant_arroz_maiz
 		@levadura = cant_levadura
 		@lupulo = cant_lupulo
@@ -31,7 +31,7 @@ class Almacen
 	end
 
 	#
-	# Verifica si en el almacen hay una cantidad de un insumo
+	# Obtiene insumos del almacen y lo actualiza
 	#
 	def traer_insumo(nombreInsumo, cantidad)
 	  case nombreInsumo
@@ -174,7 +174,7 @@ class Almacen
 	end
 
 	#
-	# Suma cantidad de un insumo
+	# Agrega una cantidad de un insumo en el almacen
 	#
 	def sumar_insumo(nombreInsumo, cantidad)
 		print 'kkkkkkkkk'
@@ -211,7 +211,7 @@ class Almacen
 
 
 	#
-	# Obtiene la cantidad de un insumo
+	# Obtiene la cantidad de un insumo que hay en el almacen
 	#
 	def obtener_insumo(nombreInsumo)
 		r=case nombreInsumo

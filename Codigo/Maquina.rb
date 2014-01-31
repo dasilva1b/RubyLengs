@@ -54,6 +54,7 @@ class Maquina
             @cantidadInsumos[i] += r
           end
       end
+      #Revisa si se lleno la maquina
       total = 0
       for i in (0..insumos.size-1)
           total +=  @cantidadInsumos[i]
@@ -90,8 +91,12 @@ class Maquina
          @cantidadInsumos[i] = 0
       end
       #Depositare
+      #Obtengo mi insumo creado
       n1=mapear(@nombre)
-      almacen.sumar_insumo(n1,total*(1-@desecho/100))
+      almacen.sumar_insumo(n1,total*(1-@desecho))
+
+
+      #Si ya no hay insumos de la maquina, pasa a inactiva
       n = mapear(@nombre)
       t = almacen.obtener_insumo(n)
       if (t == 0 || n == "cerveza")
@@ -118,7 +123,7 @@ class Maquina
     # Imprime los insumos de una maquina
     #
     def imprimirInsumos()
-	for i in (0..insumos.size)
+	for i in (0..insumos.size-1)
 	    print @insumos[i],"\t", @cantidadInsumos[i],"\n"
 	end
     end
@@ -230,7 +235,7 @@ class Enfriador < Maquina
     	@nombre = "Enfriador"
     	@insumos = ["producto_tanque_preclarificador"]
     	@porcentaje = [1]
-    	@cantidadInsumos = [100]
+    	@cantidadInsumos = [0]
     	@cant_max = 60 
     	@ciclos = 2
   	end
